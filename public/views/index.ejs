@@ -36,7 +36,7 @@
     <script src="https://apis.google.com/js/api.js"></script>
     <script>
       function loadClient() {
-        gapi.client.setApiKey("AIzaSyCNXCcg3nl00-H9h5iHRziFN8JVYl0LNfs");
+        gapi.client.setApiKey('<%= googleAPIKey %>');
         return gapi.client.load(
           "https://content.googleapis.com/discovery/v1/apis/customsearch/v1/rest"
         );
@@ -51,7 +51,7 @@
 
         return gapi.client.search.cse
           .list({
-            cx: "700767d3ab8f24876",
+            cx: '<%= searchEngineID %>',
             num: 5,
             q: query,
           })

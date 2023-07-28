@@ -1,19 +1,28 @@
 const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
 const { ScrapingBeeClient } = require("scrapingbee");
+
+dotenv.config();
 
 const app = express();
 
-const apiKey =
-  "HED5LOFXJHYSG0FEJTKTCRNRPI2SCRJ7L02TYUDL4MOPF7AH6SEMZTA1HV8YKGO6SINX2449Z70GQXH7";
+const googleAPIKey = process.env.GOOGLE_API_KEY;
+const searchEngineID = process.env.SEARCH_ENGINE_ID;
+
+const apiKey = process.env.SCRAPING_BEE_API_KEY;
 const client = new ScrapingBeeClient(apiKey);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/public/views"));
+
 app.listen(5000);
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", { googleAPIKey, searchEngineID });
 });
 
 async function scrapeUrl(url) {
