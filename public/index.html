@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Search API</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mukta&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+  <body>
+    <main>
+      <section id="query-section">
+        <h1 id="query-title" class="no-select">Custom Search API</h1>
+        <form id="query-form">
+          <input id="query" name="query" type="text" required />
+          <button id="submit" type="submit">
+            <i class="material-icons">&#xe8b6;</i>
+          </button>
+        </form>
+        <div class="hidden"></div>
+        <div class="hidden"></div>
+      </section>
+      <section id="results-section">
+        <div id="results"></div>
+      </section>
+    </main>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+      function loadClient() {
+        gapi.client.setApiKey("AIzaSyCNXCcg3nl00-H9h5iHRziFN8JVYl0LNfs");
+        return gapi.client.load(
+          "https://content.googleapis.com/discovery/v1/apis/customsearch/v1/rest"
+        );
+      }
+
+      const queryForm = document.getElementById("query-form");
+      const results = document.getElementById("results");
+
+      queryForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const query = queryForm["query"].value;
+
+        return gapi.client.search.cse
+          .list({
+            cx: "700767d3ab8f24876",
+            num: 5,
+            q: query,
+          })
+          .then((response) => {
+            results.innerHTML = "";
+            let html = "";
+            response.result.items.forEach((element, index) => {
+              html += `<div class="result-wrapper">
+                <div class="result">
+                  <div class="result-info">
+                    <p class="result-title"><a href="${element.link}" target="_blank">${
+                element.title
+              }</a></p>
+                    <a href="/scrape?url=${element.link}" target="_blank" class="scrape-button"><i class="material-icons" style="margin: 0 2px; font-size: 12px;">&#xe869;</i>Scrape</a>
+                    <p class="result-snippet">${element.snippet}</p>
+                  </div>
+                  <div class="result-scrape" id="result-scrape-${index}">
+                  </div>
+                </div>
+              </div>`;
+            });
+            results.innerHTML = html;
+          })
+          .catch((err) => {
+            console.error("Execute error", err);
+          });
+      });
+      gapi.load("client");
+
+      window.onload = loadClient;
+    </script>
+  </body>
+</html>
