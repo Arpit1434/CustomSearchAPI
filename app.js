@@ -4,7 +4,7 @@ const { ScrapingBeeClient } = require("scrapingbee");
 const app = express();
 
 const apiKey =
-  "HED5LOFXJHYSG0FEJTKTCRNRPI2SCRJ7L02TYUDL4MOPF7AH6SEMZTA1HV8YKGO6SINX2449Z70GQXH7";
+  "YOUR_API_KEY";
 const client = new ScrapingBeeClient(apiKey);
 
 app.use(express.urlencoded({ extended: true }));
